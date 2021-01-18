@@ -39,7 +39,7 @@ function xScale(data, chosenXAxis) {
 
 // function used for updating xAxis var upon click on axis label
 function rederAxes(newXScale, xAxis) { 
-    var bottomAxis = d3.axisBittom(newXScale);
+    var bottomAxis = d3.axisBottom(newXScale);
 
     // transition duration is in millisec
     xAxis.transition().duration(1000).call(bottomAxis);
@@ -84,4 +84,42 @@ function updateToolTip(chosenXAxis, circlesGroup) {
     return circlesGroup;
 }
 
+d3.csv("./assets/data/data.csv").then(function(data,err){
+    if (err) throw err;
+
+    // parse data 
+    data.forEach(function(dta) {
+        dta.poverty = +dta.poverty
+        dta.healthcare = +dta.healthcare
+        dta.smokes = +dta.smokes
+        dta.age = +dta.age
+        // console.log(dta.age)
+    
+    });
+})
+
+// xLinearScale function above csv import
+var xLinearScale = xScale(data, chosenXAxis);
+
+// Create y scale function
+var yLinearScale = d3.scaleLinear().domain([0,d3.max(data, d=>d.healthcare)]).range([height,0]);
+
+// create initial axis functions
+var bottomAxis = d3.axisBottom(xLinearScale);
+var leftAxis = d3.axisLeft(yLinearScale);
+
+// append x axis
+var xAxis = chartGroup.append("g").classed("x-axis", true).attr("transform", `translate ${height}`).call(bottomAxis);
+
+// append y axis
+chartGroup.append("g").call(leftAxis);
+
+// append initial circles
+var circlesGroup = chartGroup.selectAll("circle")
+.data(data).enter().append("circle")
+.attr("cx", d => xLinearScale(d[chosenXAxis]))
+.attr("cy", d=> yLinearScale(d.healthcare))
+.attr("r",20)
+.attr("fill", "blue")
+.attr("opacity","0.5")
 
