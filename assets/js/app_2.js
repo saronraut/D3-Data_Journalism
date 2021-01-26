@@ -251,7 +251,7 @@ function createToolTip(activeInfo) {
     let toolTip = d3
         .tip()
         .attr("class", "tooltip")
-        .offset([80,-60])
+        .offset([0,0])
         .html(function (event, d){
             let html = 
                 d.state
