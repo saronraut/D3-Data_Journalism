@@ -1,4 +1,4 @@
-var svgWidth = 960;
+var svgWidth = 900;
 var svgHeight = 500;
 
 let axisDelay = 2500;
